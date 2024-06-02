@@ -25,11 +25,10 @@ func (app *Config) routes() http.Handler {
 
 	mux.Get("/healthz", app.HandleHealthz) // add a heartbeat endpoint
 
-	mux.Post("/shipment", app.HandlePostShipment) //creates shipment
-	//mux.Get("/shipment", app.HandleGetShipments)                   //list all shipments
+	mux.Post("/shipment", app.HandlePostShipment)                  //creates shipment
 	mux.Get("/shipment/{shipmentId}", app.HandleGetShipmentById)   //get shipment by Id
 	mux.Delete("/shipment/{shipmentId}", app.HandleDeleteShipment) //Deletes  shipment
-	//mux.Post("/start/{shipmentId}", app.HandleStartShipment)       //starts a shipment
+	mux.Post("/start/{shipmentId}", app.HandleStartShipment)       //starts a shipment
 
 	return mux
 

@@ -1,6 +1,19 @@
-
-### POST /shipments
+### POST /shipment
 
 POST http://127.0.0.1:5200/shipment
 Content-Type: application/json
 
+### GET /shipment/{shipmentId}
+
+GET http://127.0.0.1:5200/shipment/b6979d31-f25e-43ee-bb4a-9dd1e1ef8456
+Content-Type: application/json
+
+### DELETE /shipment/{shipmentId}
+
+DELETE http://127.0.0.1:5200/shipment/acc3be3c-3675-4f67-a253-37869f643d66
+Content-Type: application/json
+
+### START /shipment/{shipmentId}
+
+POST http://127.0.0.1:5200/start/3e53dfc2-d348-42ae-8f8b-3a6c8122f5dc
+Content-Type: application/json

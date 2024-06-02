@@ -23,7 +23,7 @@ test_report*
 coverage.txt
 
 # Go Workspaces (introduced in Go 1.18+)
-go.work
+go.work.sum
 
 # Directory reserved for local dev files: config files, scripts, anything for individual local dev.
 ### Go ###
@@ -45,6 +45,3 @@ go.work
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
-
-# Go workspace file
-go.work

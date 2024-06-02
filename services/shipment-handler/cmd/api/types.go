@@ -27,6 +27,11 @@ type Position struct {
 	Longitude string `json:"_lon"`
 }
 
+type ShipmentPosition struct {
+	ShipmentID string   `json:"shipmentId"`
+	Position   Position `json:"position"`
+}
+
 // Load path from JSON file
 func (app *Config) GetPath() (Path, error) {
 
