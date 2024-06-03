@@ -1,19 +1,21 @@
+@endpoint = 127.0.0.1:53727
+
 ### POST /shipment
 
-POST http://127.0.0.1:5200/shipment
+POST http://{{endpoint}}/shipment
 Content-Type: application/json
 
 ### GET /shipment/{shipmentId}
 
-GET http://127.0.0.1:5200/shipment/b6979d31-f25e-43ee-bb4a-9dd1e1ef8456
+GET http://{{endpoint}}/shipment/18f450eb-e673-469b-9dcf-dff94247ca94
 Content-Type: application/json
 
 ### DELETE /shipment/{shipmentId}
 
-DELETE http://127.0.0.1:5200/shipment/acc3be3c-3675-4f67-a253-37869f643d66
+DELETE http://{{endpoint}}/shipment/18f450eb-e673-469b-9dcf-dff94247ca94
 Content-Type: application/json
 
 ### START /shipment/{shipmentId}
 
-POST http://127.0.0.1:5200/start/507f2b82-b7c7-4e18-a82f-c93b226c33f0
+POST http://{{endpoint}}/start/18f450eb-e673-469b-9dcf-dff94247ca94
 Content-Type: application/json

@@ -10,10 +10,6 @@ WORKDIR /root/
 
 COPY --from=build /src/locationHandlerService .
 
-RUN mkdir product-definitions
-
-COPY --from=build /src/cmd/api/product-definitions ./product-definitions
-
 EXPOSE 80
 
 CMD ["./locationHandlerService"]

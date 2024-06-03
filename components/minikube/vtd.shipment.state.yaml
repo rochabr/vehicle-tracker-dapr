@@ -1,0 +1,17 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: vtd.shipment.state
+  namespace: vehicle-tracker
+spec:
+  type: state.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: redis-master.redis.svc.cluster.local:6379
+  - name: redisPassword
+    secretKeyRef:
+      name: redis-password
+      key: redis-password
+scopes:
+  - shipment-handler

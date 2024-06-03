@@ -1,0 +1,24 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: vtd.pubsub
+  namespace: vehicle-tracker
+spec:
+  type: pubsub.kafka
+  version: v1  
+  metadata:
+  - name: brokers
+    value: kafka.kafka.svc.cluster.local:9092
+  - name: authType
+    value: "password"
+  - name: saslUsername
+    value: "user1"
+  - name: saslPassword
+    secretKeyRef:
+      name: kafka-password
+      key: kafka-password
+  - name: disableTls 
+    value: "true"
+scopes:
+  - location-handler
+  - shipment-handler

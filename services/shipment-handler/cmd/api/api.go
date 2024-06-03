@@ -147,7 +147,7 @@ func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
 		shipmentPosition.Position = point
 		err = app.daprClient.PublishEvent(ctx, PubSubName, Topic, shipmentPosition)
 		if err != nil {
-			log.Printf("Error publishing the order summary: %v", err)
+			log.Printf("Error publishing the current position: %v", err)
 			app.writeError(w, err, http.StatusBadRequest)
 			return
 		}
@@ -169,7 +169,7 @@ func (app *Config) createShipment() (Shipment, error) {
 		return Shipment{}, err
 	}
 
-	// Initialize and return the order summary
+	// create shipment
 	shipment := Shipment{
 		ShipmentID: uuid.New().String(),
 		Vehicle: Vehicle{

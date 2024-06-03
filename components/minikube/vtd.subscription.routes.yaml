@@ -5,6 +5,6 @@ metadata:
 spec:
   topic: routes
   route: /routes
-  pubsubname: vtd.pubsub
+  pubsubname: oms.pubsub
 scopes:
 - location-handler

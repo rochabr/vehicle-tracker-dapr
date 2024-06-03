@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: location-handler
+  namespace: vehicle-tracker
+  labels:
+    app: location-handler
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: location-handler
+  template:
+    metadata:
+      labels:
+        app: location-handler
+      annotations:
+        dapr.io/enabled: "true"
+        dapr.io/app-id: "location-handler"
+        dapr.io/app-port: "80"
+        dapr.io/config: "vtd.config"
+    spec:
+      containers:
+        - name: location-handler
+          image: "rochabr/location-handler:0.1.0"
+          env:
+          - name: APP_PORT
+            value: "80"
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1"
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+          startupProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            failureThreshold: 6
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 80
+            timeoutSeconds: 30
+            successThreshold: 1
+            failureThreshold: 12
+            periodSeconds: 10

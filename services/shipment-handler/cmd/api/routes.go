@@ -29,6 +29,7 @@ func (app *Config) routes() http.Handler {
 	mux.Get("/shipment/{shipmentId}", app.HandleGetShipmentById)   //get shipment by Id
 	mux.Delete("/shipment/{shipmentId}", app.HandleDeleteShipment) //Deletes  shipment
 	mux.Post("/start/{shipmentId}", app.HandleStartShipment)       //starts a shipment
+	//mux.Post("/stop/{shipmentId}", app.HandleStopShipment)       //stops a shipment
 
 	return mux
 
