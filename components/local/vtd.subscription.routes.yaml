@@ -1,0 +1,10 @@
+apiVersion: dapr.io/v1alpha1
+kind: Subscription
+metadata:
+  name: vtd.subscription.routes
+spec:
+  topic: routes
+  route: /routes
+  pubsubname: oms.pubsub
+scopes:
+- location-handler

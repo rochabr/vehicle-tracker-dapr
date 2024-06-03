@@ -1,6 +1,6 @@
 RELEASE_VERSION  = 0.1.0
-SERVICE_NAME = vehicle-handler
-IMAGE_NAME = vehicle-handler
+SERVICE_NAME = shipment-handler
+IMAGE_NAME = shipment-handler
 REGISTRY=rochabr
 APP_PORT=5200
 DAPR_HTTP_PORT=5280

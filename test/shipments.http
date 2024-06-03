@@ -15,5 +15,5 @@ Content-Type: application/json
 
 ### START /shipment/{shipmentId}
 
-POST http://127.0.0.1:5200/start/3e53dfc2-d348-42ae-8f8b-3a6c8122f5dc
+POST http://127.0.0.1:5200/start/507f2b82-b7c7-4e18-a82f-c93b226c33f0
 Content-Type: application/json
