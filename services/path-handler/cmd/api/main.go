@@ -1,5 +1,6 @@
 package main
 
+//dependencies
 import (
 	"log"
 	"net/http"
@@ -13,7 +14,6 @@ type Config struct {
 }
 
 func main() {
-	log.Println("Starting the shipment handler.")
 
 	//set app port
 	appPort := "5100"
@@ -32,14 +32,6 @@ func main() {
 	app := Config{
 		daprClient: client,
 	}
-
-	// retrieve all the products
-	// products, err := app.GetAppProducts()
-	// if err != nil {
-	// 	log.Fatalf("Error retrieving products: %v", err)
-	// 	return
-	// }
-	// app.products = products
 
 	log.Printf("Starting the application on port %s\n", appPort)
 

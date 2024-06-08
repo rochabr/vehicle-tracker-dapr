@@ -1,10 +1,10 @@
-apiVersion: dapr.io/v1alpha1
-kind: Subscription
-metadata:
-  name: vtd.subscription.routes
-spec:
-  topic: routes
-  route: /routes
-  pubsubname: vtd.pubsub
-scopes:
-- location-handler
+# apiVersion: dapr.io/v1alpha1
+# kind: Subscription
+# metadata:
+#   name: vtd.subscription.routes
+# spec:
+#   topic: routes
+#   route: /routes
+#   pubsubname: vtd.pubsub
+# scopes:
+#   - location-handler

@@ -11,6 +11,13 @@ spec:
     value: localhost:6379
   - name: redisPassword
     value: ""
+  - name: allowedTopics
+    value: "shipments,positions"
+  - name: publishingScopes
+    value: "shipment-handler=shipments;vehicle-actor=positions"
+  - name: subscriptionScopes
+    value: "vehicle-actor=shipments;location-handler=positions"  
 scopes:
   - location-handler
   - shipment-handler
+  - vehicle-actor

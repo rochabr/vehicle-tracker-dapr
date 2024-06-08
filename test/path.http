@@ -1,0 +1,6 @@
+@endpoint = 127.0.0.1:5200
+
+### GET /path
+
+GET http://{{endpoint}}/path
+Content-Type: application/json

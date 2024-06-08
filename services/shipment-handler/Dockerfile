@@ -12,8 +12,6 @@ COPY --from=build /src/shipmentHandlerService .
 
 RUN mkdir paths
 
-COPY --from=build /src/cmd/api/paths ./paths
-
 EXPOSE 80
 
 CMD ["./shipmentHandlerService"]

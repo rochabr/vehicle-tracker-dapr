@@ -1,0 +1,11 @@
+# apiVersion:  dapr.io/v2alpha1
+# kind:  Subscription
+# metadata:
+#   name:  vtd.shipmentsub
+# spec:
+#   topic:  shipments
+#   routes:
+#     default:  /shipment/route
+#   pubsubname:  vtd.pubsub
+#   scopes:
+#     - location-handler

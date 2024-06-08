@@ -1,7 +1,7 @@
 apiVersion: dapr.io/v1alpha1
 kind: Component
 metadata:
-  name: vtd.shipment.state
+  name: vtd.vehicle.state
   namespace: vehicle-tracker
 spec:
   type: state.redis
@@ -11,8 +11,8 @@ spec:
     value: localhost:6379
   - name: redisPassword
     value: ""
-  - name: keyPrefix
-    value: none
+  - name: actorStateStore
+    value: "true"
 scopes:
-  - shipment-handler
   - vehicle-actor
+  - shipment-handler

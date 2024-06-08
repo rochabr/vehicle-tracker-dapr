@@ -7,23 +7,23 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
 )
 
 const (
-	Topic              = "routes"
-	PubSubName         = "vtd.pubsub"
-	ShipmentStateStore = "vtd.shipment.state"
+	Topic                    = "shipments"
+	PubSubName               = "vtd.pubsub"
+	ShipmentStateStore       = "vtd.shipment.state"
+	PathHandlerServiceDaprId = "path-handler"
 )
 
 // Handles the health endpoint for Dapr
 func (app *Config) HandleHealthz(w http.ResponseWriter, r *http.Request) {
 
 	//set app port
-	daprHttpPort := "5280"
+	daprHttpPort := "5180"
 	if value, ok := os.LookupEnv("DAPR_HTTP_PORT"); ok {
 		daprHttpPort = value
 	}
@@ -61,7 +61,7 @@ func (app *Config) HandleGetShipmentById(w http.ResponseWriter, r *http.Request)
 }
 
 // Creates shipment handler
-func (app *Config) HandlePostShipment(w http.ResponseWriter, r *http.Request) {
+func (app *Config) HandleCreateShipment(w http.ResponseWriter, r *http.Request) {
 
 	// Create shipment
 	shipment, err := app.createShipment()
@@ -109,6 +109,36 @@ func (app *Config) HandleDeleteShipment(w http.ResponseWriter, r *http.Request) 
 	app.writeJSON(w, http.StatusOK, "Shipment deleted")
 }
 
+// Send shipment to pubsub
+// func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
+// 	shipmentId := chi.URLParam(r, "shipmentId")
+
+// 	if shipmentId == "" {
+// 		app.writeError(w, errors.New("Shipment ID not provided"), http.StatusNotFound)
+// 		return
+// 	}
+
+// 	// marshall shipment to save to state store
+// 	data, err := json.Marshal(shipment)
+// 	if err != nil {
+// 		log.Printf("Error marshalling shipment. Error: %v", err)
+// 		app.writeError(w, err, http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	// save shipment to state store
+// 	err = app.daprClient.SaveState(context.Background(), ShipmentStateStore, shipment.ShipmentID, data, nil)
+// 	if err != nil {
+// 		app.writeError(w, err, http.StatusBadRequest)
+// 		return
+// 	}
+
+// 	log.Printf("Shipment %v created. Vehicle: %v. Driver: %v.", shipment.ShipmentID, shipment.Vehicle.VehicleID, shipment.Vehicle.Driver)
+
+// 	app.writeJSON(w, http.StatusCreated, shipment.ShipmentID)
+
+//}
+
 // Start shipment handler
 func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
 	shipmentId := chi.URLParam(r, "shipmentId")
@@ -118,53 +148,62 @@ func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Get shipment
 	shipment, err := app.getShipment(shipmentId)
 	if err != nil {
 		app.writeError(w, err, http.StatusBadRequest)
 		return
 	}
 
+	// Check if shipment is found
 	if shipment.ShipmentID == "" {
 		app.writeJSON(w, http.StatusNotFound, "Shipment not found")
 		return
 	}
 
-	log.Printf("Starting shipment %v", shipment.ShipmentID)
-
-	// Send path to pub/sub
-	ctx := context.Background()
-
+	// Check if shipment path is empty
 	if shipment.Path.Positions == nil || len(shipment.Path.Positions) == 0 {
 		app.writeError(w, errors.New("Shipment path not found"), http.StatusNotFound)
 		return
 	}
 
-	// Publish each point in the path to the pub/sub
-	var shipmentPosition ShipmentPosition
-	shipmentPosition.ShipmentID = shipment.ShipmentID
+	shipment.Status = ShipmentStatusEnRoute
 
-	for _, point := range shipment.Path.Positions {
-		shipmentPosition.Position = point
-		err = app.daprClient.PublishEvent(ctx, PubSubName, Topic, shipmentPosition)
-		if err != nil {
-			log.Printf("Error publishing the current position: %v", err)
-			app.writeError(w, err, http.StatusBadRequest)
-			return
-		}
-		log.Printf("Vehicle position point: %v", point)
-		time.Sleep(3 * time.Second)
+	log.Printf("Starting shipment %v", shipment.ShipmentID)
+
+	// Send path to pub/sub
+	ctx := context.Background()
+	err = app.daprClient.PublishEvent(ctx, PubSubName, Topic, shipment)
+	if err != nil {
+		log.Printf("Error starting the shipment: %v", err)
+		app.writeError(w, err, http.StatusBadRequest)
+		return
 	}
 
-	log.Printf("Shipment %v arrived.", shipmentId)
-	app.writeJSON(w, http.StatusOK, "Shipment arrived")
+	// Publish each point in the path to the pub/sub
+	// var shipmentPosition ShipmentPosition
+	// shipmentPosition.ShipmentID = shipment.ShipmentID
+
+	// for _, point := range shipment.Path.Positions {
+	// 	shipmentPosition.Position = point
+	// 	err = app.daprClient.PublishEvent(ctx, PubSubName, Topic, shipmentPosition)
+	// 	if err != nil {
+	// 		log.Printf("Error publishing the current position: %v", err)
+	// 		app.writeError(w, err, http.StatusBadRequest)
+	// 		return
+	// 	}
+	// 	log.Printf("Vehicle position point: %v", point)
+	// 	time.Sleep(3 * time.Second)
+	// }
+
+	app.writeJSON(w, http.StatusOK, shipment.ShipmentID)
 }
 
 // Helper methods
-
 func (app *Config) createShipment() (Shipment, error) {
 
-	// Load path from JSON file
-	path, err := app.GetPath()
+	// Gte calculated path
+	path, err := app.getPath()
 	if err != nil {
 		return Shipment{}, err
 	}
@@ -176,7 +215,8 @@ func (app *Config) createShipment() (Shipment, error) {
 			VehicleID: 1,
 			Driver:    "John Doe",
 		},
-		Path: path,
+		Path:   path,
+		Status: ShipmentStatusPending,
 	}
 
 	return shipment, nil
@@ -204,4 +244,27 @@ func (app *Config) getShipment(shipmentId string) (Shipment, error) {
 	}
 
 	return shipment, nil
+}
+
+func (app *Config) getPath() (Path, error) {
+
+	ctx := context.Background()
+	log.Printf("get path")
+	response, err := app.daprClient.InvokeMethod(ctx, PathHandlerServiceDaprId, "path", "get")
+	if err != nil {
+		log.Printf("error calling service: %v", err)
+		return Path{Positions: []Position{}},
+			err
+	}
+
+	var path Path
+	err = json.Unmarshal(response, &path)
+	if err != nil {
+		log.Printf("error unmarshalling response: %v", err)
+		return Path{Positions: []Position{}},
+			err
+	}
+
+	log.Print("Loaded path")
+	return path, nil
 }

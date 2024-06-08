@@ -1,0 +1,7 @@
+go 1.22.3
+
+use ./shipment-handler
+
+use ./location-handler
+
+use ./path-handler

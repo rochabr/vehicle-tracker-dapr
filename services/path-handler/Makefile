@@ -1,16 +1,14 @@
 RELEASE_VERSION  = 0.1.0
-SERVICE_NAME = location-handler
-IMAGE_NAME = location-handler
+SERVICE_NAME = path-handler
+IMAGE_NAME = path-handler
 REGISTRY=rochabr
-APP_PORT=5300
-DAPR_HTTP_PORT=5380
-DAPR_GRPC_PORT=5301
+APP_PORT=5200
+DAPR_HTTP_PORT=5280
+DAPR_GRPC_PORT=5201
 
 .PHONY: tidy
 tidy: ## Updates the go modules and vendors all dependencies 
 	go mod tidy
-
-
 
 .PHONY: run
 run: tidy ## Runs uncompiled code in Dapr

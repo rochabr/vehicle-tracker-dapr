@@ -1,0 +1,154 @@
+@daprHttp=http://localhost:7180
+
+### Get Dapr actor info
+GET {{ daprHttp }}/dapr/config
+dapr-app-id: vehicle-actor
+
+### --- Actors ---
+### GetState
+
+GET {{ daprHttp }}/v1.0/actors/VehicleActor/marcelinho/method/GetState
+dapr-app-id: vehicle-actor
+
+
+### SetState
+POST {{ daprHttp }}/v1.0/actors/VehicleActor/marcelinho/method/SetState
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+"order7788"
+
+### DeleteOrder
+DELETE {{ daprHttp }}/v1.0/actors/VehicleActor/marcelinho/method/DeleteOrder
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+"make-line-service||5c71ec54-8f6d-4404-bf66-bef517820e13"
+
+### --- State ---
+
+### Set the greeting for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/SetGreeting
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+"Hello from Stateful222Actor!"
+
+### Get the saved greeting for the actor with ID user2
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/method/GetGreeting
+dapr-app-id: vehicle-actor
+
+### Set the greeting using state endpoint for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    }
+]
+
+### Get the greeting using state endpoint for the actor with ID user2
+GET {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state/greeting
+dapr-app-id: vehicle-actor
+
+
+### Set two keys using state endpoint for the actor with ID user2
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    },
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "date",
+            "value": "{{$datetime iso8601}}"
+        }
+    }
+]
+
+### Set one key, delete another using state endpoint for the actor with ID Alex
+POST {{ daprHttp }}/v1.0/actors/StatefulActor/user2/state
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+[
+    {
+        "operation": "upsert",
+        "request": {
+            "key": "greeting",
+            "value": "Hello from StatefulActor (state endpoint)!"
+        }
+    },
+    {
+        "operation": "delete",
+        "request": {
+            "key": "date"
+        }
+    }
+]
+
+### --- Timers ---
+
+### Reset snooze count for TimerActor
+POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/ResetSnoozeCount
+dapr-app-id: vehicle-actor
+
+
+### Create Timer
+POST {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/method/CreateTimer
+dapr-app-id: vehicle-actor
+
+
+### Delete Timer
+DELETE {{ daprHttp }}/v1.0/actors/TimerActor/alarmclock1/timers/snooze
+dapr-app-id: vehicle-actor
+
+
+### --- Reminders ---
+
+### Set Reminder
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+{
+    "dueTime" : "0h0m2s0ms",
+    "period" : "R3/P0Y0M0W0DT0H0M3S"
+}
+
+
+### Get the greeting using state endpoint for the actor with ID alarmclock2
+GET {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/state/snoozecount
+dapr-app-id: vehicle-actor
+
+
+### Reset the snooze count
+POST {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/method/ResetSnoozeCount
+dapr-app-id: vehicle-actor
+
+### Delete Reminder
+DELETE {{ daprHttp }}/v1.0/actors/ReminderActor/alarmclock2/reminders/snooze
+dapr-app-id: vehicle-actor
+
+### --- Actor to Actor ---
+
+### Call the HelloWorldActor from ActorToActor
+POST {{ daprHttp }}/v1.0/actors/ActorToActor/id1/method/CallHelloWorld
+dapr-app-id: vehicle-actor
+Content-Type: application/json
+
+"helloWorldId1"

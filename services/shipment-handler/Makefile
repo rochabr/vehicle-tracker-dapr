@@ -2,9 +2,9 @@ RELEASE_VERSION  = 0.1.0
 SERVICE_NAME = shipment-handler
 IMAGE_NAME = shipment-handler
 REGISTRY=rochabr
-APP_PORT=5200
-DAPR_HTTP_PORT=5280
-DAPR_GRPC_PORT=5201
+APP_PORT=5100
+DAPR_HTTP_PORT=5180
+DAPR_GRPC_PORT=5101
 
 .PHONY: tidy
 tidy: ## Updates the go modules and vendors all dependencies 
