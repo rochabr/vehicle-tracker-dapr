@@ -19,6 +19,13 @@ spec:
       key: kafka-password
   - name: disableTls 
     value: "true"
+  - name: allowedTopics
+    value: "shipments,locations"
+  - name: publishingScopes
+    value: "shipment-handler=shipments;vehicle-actor=locations"
+  - name: subscriptionScopes
+    value: "vehicle-actor=shipments;location-handler=locations"  
 scopes:
   - location-handler
   - shipment-handler
+  - vehicle-actor

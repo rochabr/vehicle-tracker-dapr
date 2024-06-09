@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: shipment-handler
+  name: vehicle-actor
   namespace: vehicle-tracker
   labels:
-    app: shipment-handler
+    app: vehicle-actor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: shipment-handler
+      app: vehicle-actor
   template:
     metadata:
       labels:
-        app: shipment-handler
+        app: vehicle-actor
       annotations:
         dapr.io/enabled: "true"
-        dapr.io/app-id: "shipment-handler"
+        dapr.io/app-id: "vehicle-actor"
         dapr.io/app-port: "80"
         dapr.io/config: "vtd.config"
     spec:
       containers:
-        - name: shipment-handler
-          image: "rochabr/shipment-handler:0.1.0"
+        - name: vehicle-actor
+          image: "rochabr/vehicle-actor:0.1.0"
           env:
           - name: APP_PORT
             value: "80"

@@ -13,8 +13,8 @@ spec:
     secretKeyRef:
       name: redis-password
       key: redis-password
-  - name: keyPrefix
-    value: none
+  - name: actorStateStore
+    value: "true"
 scopes:
-  - shipment-handler
   - vehicle-actor
+  - shipment-handler

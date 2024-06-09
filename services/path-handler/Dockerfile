@@ -10,7 +10,7 @@ WORKDIR /root/
 
 COPY --from=build /src/pathHandlerService .
 
-COPY --from=build /src/cmd/api/paths ./paths
+COPY --from=build /src/paths ./paths
 
 EXPOSE 80
 

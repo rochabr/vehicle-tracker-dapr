@@ -10,8 +10,6 @@ DAPR_GRPC_PORT=5301
 tidy: ## Updates the go modules and vendors all dependencies 
 	go mod tidy
 
-
-
 .PHONY: run
 run: tidy ## Runs uncompiled code in Dapr
 	dapr run \
