@@ -1,3 +1,4 @@
+using System.Threading;
 using Dapr.Actors;
 using Dapr.Actors.Runtime;
 using Dapr.Client;
@@ -8,15 +9,19 @@ namespace VehicleHandler.Actors
 {
     public interface IVehicleActor : IActor
     {
-        // Task<string> GetState();
-        // Task SetState(string state);
-        Task<string> SayHelloWorld();
-        Task<bool> DeleteOrder(string orderId);
+        Task<bool> StartShipment(Shipment shipmentId);
     }
 
     public class VehicleActor : Actor, IVehicleActor
     {
-        string STATESTORE = "vtd.shipment.state";
+
+        public readonly string ShipmentStatusPending = "pending";
+        public readonly string ShipmentStatusEnRoute = "en-route";
+        public readonly string ShipmentStatusCompleted = "completed";
+        string SHIPMENT_STATE_STORE = "vtd.shipment.state";
+        string PUBSUB = "vtd.pubsub";
+        string LOCATION_TOPIC = "locations";
+
         public VehicleActor(ActorHost host) : base(host)
         {
         }
@@ -34,35 +39,53 @@ namespace VehicleHandler.Actors
         //     return await client.GetStateAsync<string>(STATESTORE, shipmentId);
         // }
 
-        public Task<string> SayHelloWorld()
+        public async Task<bool> StartShipment(Shipment shipment)
         {
-            return Task.FromResult("Hello World!");
-        }
+            using var client = new DaprClientBuilder().Build();
 
-        public async Task<bool> DeleteOrder(string orderId)
-        {
-            try
+            if (shipment == null)
             {
-                using var client = new DaprClientBuilder().Build();
-
-                CancellationTokenSource source = new CancellationTokenSource();
-                CancellationToken cancellationToken = source.Token;
-
-                await client.DeleteStateAsync(STATESTORE, orderId, cancellationToken: cancellationToken);
-
-                return true;
-            }
-            catch (Exception ex)
-            {
+                Console.WriteLine("Shipment not found");
                 return false;
             }
 
+            Console.WriteLine("Shipment path: " + shipment.Path.Positions.Count);
+
+            foreach (Position position in shipment.Path.Positions)
+            {
+                Console.WriteLine("Position: " + position.Latitude + " - " + position.Longitude);
+
+                // Publish each point in the path to the pub/sub
+                var shipmentPosition = new ShipmentPosition(shipment.ShipmentId, position);
+
+                //publish last position to pubsub
+                try
+                {
+                    CancellationTokenSource source = new CancellationTokenSource();
+                    CancellationToken cancellationToken = source.Token;
+
+                    await client.PublishEventAsync(PUBSUB, LOCATION_TOPIC, shipmentPosition, cancellationToken);
+                    Console.WriteLine("Published last position data: " + shipmentPosition);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Error publishing shipment position for Shipment: {shipmentId}. Message: {Content}", shipment.ShipmentId, e.InnerException?.Message ?? e.Message);
+                    return false;
+                }
+
+                Thread.Sleep(3000);
+            }
+
+            return true;
+
         }
 
-        private async Task<Shipment> GetShipment(string shipmentId)
+        protected override Task OnActivateAsync()
         {
-            using var client = new DaprClientBuilder().Build();
-            return await client.GetStateAsync<Shipment>(STATESTORE, shipmentId);
+            // Provides an opportunity to perform some optional setup when an actor is activated.
+            // An actor is activated the first time any of its methods are invoked.
+            Console.WriteLine($"Shipment {this.Id} is taking off!");
+            return Task.CompletedTask;
         }
     }
 }

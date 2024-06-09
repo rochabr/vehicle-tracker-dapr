@@ -27,10 +27,18 @@ else
     //app.UseHttpsRedirection();
 }
 
+// Dapr uses a random port for gRPC by default. If we don't know what that port
+// is (because this app was started separate from dapr), then assume 50001.
+if (string.IsNullOrEmpty(Environment.GetEnvironmentVariable("DAPR_GRPC_PORT")))
+{
+    Environment.SetEnvironmentVariable("DAPR_GRPC_PORT", "7101");
+}
+
+app.UseCloudEvents();
 app.MapActorsHandlers();
 app.MapControllers();
 
-app.UseCloudEvents();
+//app.UseCloudEvents();
 app.MapSubscribeHandler();
 
 app.Run();

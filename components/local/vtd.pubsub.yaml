@@ -12,11 +12,11 @@ spec:
   - name: redisPassword
     value: ""
   - name: allowedTopics
-    value: "shipments,positions"
+    value: "shipments,locations"
   - name: publishingScopes
-    value: "shipment-handler=shipments;vehicle-actor=positions"
+    value: "shipment-handler=shipments;vehicle-actor=locations"
   - name: subscriptionScopes
-    value: "vehicle-actor=shipments;location-handler=positions"  
+    value: "vehicle-actor=shipments;location-handler=locations"  
 scopes:
   - location-handler
   - shipment-handler

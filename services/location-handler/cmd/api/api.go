@@ -9,10 +9,10 @@ import (
 )
 
 const (
-	Topic              = "routes"
+	Topic              = "locations"
 	PubSubName         = "vtd.pubsub"
 	LocationStateStore = "vtd.location.state"
-	Route              = "routes"
+	Route              = "locations"
 )
 
 // Handles the health endpoint for Dapr
@@ -69,7 +69,7 @@ func (app *Config) HandleDaprEndpoint(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// Handles the make line endpoint
+// Handles the current position(location) endpoint
 func (app *Config) HandleCurrentPosition(w http.ResponseWriter, r *http.Request) {
 
 	// Unmarshall customer order

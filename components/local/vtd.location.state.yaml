@@ -13,3 +13,4 @@ spec:
     value: ""
 scopes:
   - location-handler
+  - vehicle-tracker

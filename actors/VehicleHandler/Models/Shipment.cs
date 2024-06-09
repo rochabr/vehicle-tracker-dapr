@@ -4,6 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace VehicleHandler.Models
 {
+
     public class Shipment
     {
         [JsonPropertyName("shipmentId")]
@@ -13,33 +14,11 @@ namespace VehicleHandler.Models
         public Vehicle Vehicle { get; set; }
 
         [JsonPropertyName("path")]
-        public Path path { get; set; }
+        public Path Path { get; set; }
 
         [JsonPropertyName("status")]
         public string Status { get; set; }
     }
-    public class Path
-    {
-        [JsonPropertyName("positions")]
-        public List<Position> positions { get; set; }
-    }
-
-    public class Position
-    {
-        [JsonPropertyName("_lat")]
-        public string Latitude { get; set; }
-
-        [JsonPropertyName("_lon")]
-        public string Longitude { get; set; }
-    }
-
-    public class ShipmentPosition
-    {
-        [JsonPropertyName("shipmentId")]
-        public string ShipmentId { get; set; }
-
-        [JsonPropertyName("position")]
-        public Position Position { get; set; }
-    }
 }
+
 

@@ -23,8 +23,8 @@ type Path struct {
 }
 
 type Position struct {
-	Latitude  string `json:"_lat"`
-	Longitude string `json:"_lon"`
+	Latitude  float64 `json:"_lat"`
+	Longitude float64 `json:"_lon"`
 }
 
 type ShipmentPosition struct {

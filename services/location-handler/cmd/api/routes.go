@@ -27,7 +27,7 @@ func (app *Config) routes() http.Handler {
 
 	mux.Get("/dapr/subscribe", app.HandleDaprEndpoint)
 
-	mux.Post("/routes", app.HandleCurrentPosition) // handle subscription to manage current shipment position
+	mux.Post("/locations", app.HandleCurrentPosition) // handle subscription to manage current shipment position
 
 	return mux
 

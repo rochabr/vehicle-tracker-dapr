@@ -10,6 +10,6 @@ namespace VehicleHandler.Models
         public int VehicleId { get; set; }
 
         [JsonPropertyName("driver")]
-        public string Driver { get; set; }
+        public required string Driver { get; set; }
     }
 }

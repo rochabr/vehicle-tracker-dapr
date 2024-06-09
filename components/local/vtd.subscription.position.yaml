@@ -1,0 +1,10 @@
+# apiVersion: dapr.io/v1alpha1
+# kind: Subscription
+# metadata:
+#   name: vtd.subscription.position
+# spec:
+#   topic: positions
+#   route: /vehicle-position
+#   pubsubname: vtd.pubsub
+# scopes:
+#   - location-handler

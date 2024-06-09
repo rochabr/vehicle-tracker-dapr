@@ -1,5 +1,7 @@
 package main
 
+import "context"
+
 const (
 	ShipmentStatusPending   = "pending"
 	ShipmentStatusEnRoute   = "en-route"
@@ -23,11 +25,24 @@ type Path struct {
 }
 
 type Position struct {
-	Latitude  string `json:"_lat"`
-	Longitude string `json:"_lon"`
+	Latitude  float64 `json:"_lat"`
+	Longitude float64 `json:"_lon"`
 }
 
 type ShipmentPosition struct {
 	ShipmentID string   `json:"shipmentId"`
 	Position   Position `json:"position"`
+}
+
+type VehicleActorStub struct {
+	sId           string
+	StartShipment func(context.Context, *Shipment) (bool, error)
+}
+
+func (a *VehicleActorStub) Type() string {
+	return "VehicleActor"
+}
+
+func (a *VehicleActorStub) ID() string {
+	return a.sId
 }

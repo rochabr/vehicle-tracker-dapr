@@ -1,5 +1,5 @@
 @endpoint = 127.0.0.1:5100
-@shipment-id = c587fe87-ea1c-4a7b-95fa-efd2b1f13f49
+@shipment-id = 3c347bac-699a-4833-9a66-1242146f72b4
 
 ### POST /shipment
 

@@ -20,17 +20,14 @@ namespace VehicleHandler.Controllers
         private const string VehicleActorType = "VehicleActor";
 
         //Subscribe to a topic 
-        [Topic("vtd.pubsub", "shipments")]
         [HttpPost("start-shipment")]
-        public async Task<string> startVehicle([FromBody] Shipment shipment)
+        public IActionResult StartVehicle([FromBody] Shipment shipment)
         {
-            Console.WriteLine("Subscriber received : " + shipment.ShipmentId);
-
             var vehicleActorProxy = ActorProxy.Create<IVehicleActor>(new ActorId(shipment.ShipmentId), VehicleActorType);
-            var result = await vehicleActorProxy.SayHelloWorld();
-            Console.WriteLine("Subscriber received : " + result);
+            vehicleActorProxy.StartShipment(shipment);
 
-            return result;
+            return Ok();
+
         }
     }
 }
