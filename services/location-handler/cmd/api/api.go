@@ -3,9 +3,12 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/go-chi/chi/v5"
 )
 
 const (
@@ -19,7 +22,7 @@ const (
 func (app *Config) HandleHealthz(w http.ResponseWriter, r *http.Request) {
 
 	//set app port
-	daprHttpPort := "5280"
+	daprHttpPort := "5380"
 	if value, ok := os.LookupEnv("DAPR_HTTP_PORT"); ok {
 		daprHttpPort = value
 	}
@@ -112,4 +115,38 @@ func (app *Config) HandleCurrentPosition(w http.ResponseWriter, r *http.Request)
 	}
 
 	app.writeJSON(w, http.StatusOK, "Shipment position stored successfully")
+}
+
+// Handles the current position(location) endpoint
+func (app *Config) HandleGetLastPosition(w http.ResponseWriter, r *http.Request) {
+
+	shipmentId := chi.URLParam(r, "shipmentId")
+	log.Printf("2 Getting last position for shipment %v.", shipmentId)
+
+	if shipmentId == "" {
+		app.writeError(w, errors.New("missing shipmentId on request"), http.StatusBadRequest)
+	}
+
+	log.Printf("Getting last position for shipment %v.", shipmentId)
+
+	// save shipment location to state store
+	item, err := app.daprClient.GetState(context.Background(), LocationStateStore, shipmentId, nil)
+	if err != nil {
+		app.writeError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	if item.Value == nil {
+		app.writeJSON(w, http.StatusNotFound, "Shipment Position not found")
+		return
+	}
+
+	var shipmentPosition ShipmentPosition
+	err = json.Unmarshal(item.Value, &shipmentPosition)
+	if err != nil {
+		app.writeError(w, err, http.StatusBadRequest)
+		return
+	}
+
+	app.writeJSON(w, http.StatusOK, shipmentPosition)
 }

@@ -1,0 +1,8 @@
+@endpoint = 127.0.0.1:5300
+
+@shipment-id = 61a463bd-f2d6-4acc-976f-3225da69f6c5
+
+### GET /last
+
+GET http://{{endpoint}}/last/{{shipment-id}}
+Content-Type: application/json
