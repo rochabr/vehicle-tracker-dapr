@@ -4,18 +4,7 @@ A sample shipment tracker to showcase Dapr components and features.
 
 ## Architecture and Service Definitions
 
-![Logical Application Architecture Diagram](assets/demo-arch.png)
 
-
-| Service          | Definition                                                                                                 | Dapr Component(s) |
-|------------------|-------------------------------------------------------------------------------------------------------------| --------------------------------|
-| Loyalty Service | Manages the loyalty program by modifying customer reward points based on spend | Kafka subscriber, Redis state store |
-| Make Line Service | Responsible for simulating and coordinating a 'queue' of current orders. Monitors the processing and completion of each order in the 'queue' | Kafka subscriber, Redis state store |  
-| Order Service | Basic CRUD API that is used to place and manage orders | Kafka publisher |
-| Receipt Generation Service | Archival program that generates and stores order receipts for auditing and historical purposes  | Kafka subscriber, Redis output binding |
-| Order Processor Workflow  | Responsible for orchestrating a workflow(Loyalty, Receipt, Make-Line) whenever an order is created.   | Kafka subscriber, Redis output binding, Dapr Workflow Client |
-| Virtual Customer | 'Customer simulation' program that simulates customers placing orders | Order service invocation |
-| Virtual Worker | 'Worker simulation' program that simulates the completion of customer orders | Cron input binding, Make-line service invocation | 
 
 ## Demo setup
 
