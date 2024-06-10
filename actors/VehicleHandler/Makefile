@@ -1,4 +1,4 @@
-RELEASE_VERSION  = 0.1.0
+RELEASE_VERSION  = 0.1.1
 IMAGE_NAME = vehicle-actor
 SERVICE_NAME = vehicle-actor
 REGISTRY=rochabr

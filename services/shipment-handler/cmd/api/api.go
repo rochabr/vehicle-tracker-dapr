@@ -13,8 +13,6 @@ import (
 )
 
 const (
-	Topic                    = "shipments"
-	PubSubName               = "vtd.pubsub"
 	ShipmentStateStore       = "vtd.shipment.state"
 	PathHandlerServiceDaprId = "path-handler"
 )
@@ -116,36 +114,6 @@ func (app *Config) HandleDeleteShipment(w http.ResponseWriter, r *http.Request) 
 	app.writeJSON(w, http.StatusOK, "Shipment deleted")
 }
 
-// Send shipment to pubsub
-// func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
-// 	shipmentId := chi.URLParam(r, "shipmentId")
-
-// 	if shipmentId == "" {
-// 		app.writeError(w, errors.New("Shipment ID not provided"), http.StatusNotFound)
-// 		return
-// 	}
-
-// 	// marshall shipment to save to state store
-// 	data, err := json.Marshal(shipment)
-// 	if err != nil {
-// 		log.Printf("Error marshalling shipment. Error: %v", err)
-// 		app.writeError(w, err, http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	// save shipment to state store
-// 	err = app.daprClient.SaveState(context.Background(), ShipmentStateStore, shipment.ShipmentID, data, nil)
-// 	if err != nil {
-// 		app.writeError(w, err, http.StatusBadRequest)
-// 		return
-// 	}
-
-// 	log.Printf("Shipment %v created. Vehicle: %v. Driver: %v.", shipment.ShipmentID, shipment.Vehicle.VehicleID, shipment.Vehicle.Driver)
-
-// 	app.writeJSON(w, http.StatusCreated, shipment.ShipmentID)
-
-//}
-
 // Start shipment handler
 func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
 	ctx := context.Background()
@@ -197,27 +165,8 @@ func (app *Config) HandleStartShipment(w http.ResponseWriter, r *http.Request) {
 	_, err = vehicleActor.StartShipment(ctx, &shipment)
 	if err != nil {
 		app.writeError(w, errors.New("error starting shipment actor"), http.StatusBadRequest)
+		return
 	}
-
-	// marshall shipment
-	// data, err := json.Marshal(shipment.ShipmentID)
-	// if err != nil {
-	// 	app.writeError(w, errors.New("error creating shipment byte[]"), http.StatusBadRequest)
-	// 	return
-	// }
-
-	//message := []byte("Hello, Dapr!")
-
-	//log.Printf("Sending shipment %v to pubsub", shipment)
-
-	// Send path to pub/sub
-	// ctx := context.Background()
-	// err = app.daprClient.PublishEvent(ctx, PubSubName, Topic, shipment)
-	// if err != nil {
-	// 	log.Printf("Error starting the shipment: %v", err)
-	// 	app.writeError(w, err, http.StatusBadRequest)
-	// 	return
-	// }
 
 	app.writeJSON(w, http.StatusOK, shipment.ShipmentID)
 }

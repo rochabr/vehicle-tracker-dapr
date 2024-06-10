@@ -33,14 +33,6 @@ func main() {
 		daprClient: client,
 	}
 
-	// retrieve all the products
-	// products, err := app.GetAppProducts()
-	// if err != nil {
-	// 	log.Fatalf("Error retrieving products: %v", err)
-	// 	return
-	// }
-	// app.products = products
-
 	log.Printf("Starting the application on port %s\n", appPort)
 
 	// create a new server

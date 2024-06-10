@@ -1,4 +1,4 @@
-RELEASE_VERSION  = 0.1.0
+RELEASE_VERSION  = 0.1.1
 SERVICE_NAME = shipment-handler
 IMAGE_NAME = shipment-handler
 REGISTRY=rochabr

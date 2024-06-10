@@ -1,4 +1,5 @@
 @daprHttp=http://localhost:7180
+//@daprHttp=http://localhost:55572
 
 ### Get Dapr actor info
 GET {{ daprHttp }}/dapr/config

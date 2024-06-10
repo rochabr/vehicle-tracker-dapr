@@ -59,16 +59,16 @@ func (app *Config) HandleDaprEndpoint(w http.ResponseWriter, r *http.Request) {
 
 	jsonBytes, err := json.Marshal(jsonData)
 	if err != nil {
-		log.Printf("Error Marshalling json data. Error: %v", err)
 		app.writeError(w, err, http.StatusBadRequest)
+		return
 	}
 
 	log.Print("Writing response to Dapr")
 	_, err = w.Write(jsonBytes)
 	//err = app.writeJSON(w, http.StatusOK, "{}")
 	if err != nil {
-		log.Printf("Error writing json response. Error: %v", err)
 		app.writeError(w, err, http.StatusBadRequest)
+		return
 	}
 }
 
@@ -125,6 +125,7 @@ func (app *Config) HandleGetLastPosition(w http.ResponseWriter, r *http.Request)
 
 	if shipmentId == "" {
 		app.writeError(w, errors.New("missing shipmentId on request"), http.StatusBadRequest)
+		return
 	}
 
 	log.Printf("Getting last position for shipment %v.", shipmentId)

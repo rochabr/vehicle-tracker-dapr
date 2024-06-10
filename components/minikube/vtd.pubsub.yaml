@@ -27,5 +27,4 @@ spec:
     value: "vehicle-actor=shipments;location-handler=locations"  
 scopes:
   - location-handler
-  - shipment-handler
   - vehicle-actor

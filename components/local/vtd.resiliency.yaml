@@ -1,0 +1,53 @@
+apiVersion: dapr.io/v1alpha1
+kind: Resiliency
+metadata:
+  name: oms.resiliency
+  namespace: vehicle-tracker
+scopes:
+  - path-handler
+  - vehicle-actor
+  - shipment-handler
+  - location-handler
+spec:
+  policies:
+    timeouts:
+      general: 5s
+      important: 60s
+      largeResponse: 10s
+    retries:
+      pubsubRetry:
+        policy: constant
+        duration: 5s
+        maxRetries: 10
+      retryForever:
+        policy: exponential
+        maxInterval: 15s
+        maxRetries: -1 # retry indefinitely
+      important:
+        policy: constant
+        duration: 5s
+        maxRetries: 30
+    circuitBreakers:
+      simpleCB:
+        maxRequests: 1
+        timeout: 30s 
+        trip: consecutiveFailures >= 5
+      pubsubCB:
+        maxRequests: 1
+        interval: 8s
+        timeout: 45s
+        trip: consecutiveFailures > 8
+  targets:
+    apps:
+      location-handler:
+        timeout: general
+        retry: important
+        circuitBreaker: simpleCB
+      # receipt-generation-service:
+      #   timeout: general
+      #   retry: important
+      #   circuitBreaker: simpleCB
+      # virtual-worker:
+      #   timeout: general
+      #   retry: important
+      #   circuitBreaker: simpleCB

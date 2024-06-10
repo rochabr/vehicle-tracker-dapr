@@ -14,10 +14,9 @@ spec:
   - name: allowedTopics
     value: "shipments,locations"
   - name: publishingScopes
-    value: "shipment-handler=shipments;vehicle-actor=locations"
+    value: "vehicle-actor=locations"
   - name: subscriptionScopes
-    value: "vehicle-actor=shipments;location-handler=locations"  
+    value: "location-handler=locations"  
 scopes:
   - location-handler
-  - shipment-handler
   - vehicle-actor

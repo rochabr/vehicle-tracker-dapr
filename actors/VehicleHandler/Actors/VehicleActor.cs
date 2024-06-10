@@ -4,6 +4,9 @@ using Dapr.Actors.Runtime;
 using Dapr.Client;
 using VehicleHandler.Models;
 
+using System.Text.Json;
+
+
 
 namespace VehicleHandler.Actors
 {
@@ -18,26 +21,12 @@ namespace VehicleHandler.Actors
         public readonly string ShipmentStatusPending = "pending";
         public readonly string ShipmentStatusEnRoute = "en-route";
         public readonly string ShipmentStatusCompleted = "completed";
-        string SHIPMENT_STATE_STORE = "vtd.shipment.state";
         string PUBSUB = "vtd.pubsub";
         string LOCATION_TOPIC = "locations";
 
         public VehicleActor(ActorHost host) : base(host)
         {
         }
-        // public async Task SetState(string shipmentId)
-        // {
-        //     using var client = new DaprClientBuilder().Build();
-
-        //     //Using Dapr SDK to save and get state
-        //     await client.SaveStateAsync(STATESTORE, shipmentId, state);
-        // }
-
-        // public async Task<string> GetState()
-        // {
-        //     using var client = new DaprClientBuilder().Build();
-        //     return await client.GetStateAsync<string>(STATESTORE, shipmentId);
-        // }
 
         public async Task<bool> StartShipment(Shipment shipment)
         {
@@ -63,6 +52,9 @@ namespace VehicleHandler.Actors
                 {
                     CancellationTokenSource source = new CancellationTokenSource();
                     CancellationToken cancellationToken = source.Token;
+
+                    string jsonString = JsonSerializer.Serialize(shipmentPosition);
+                    Console.WriteLine("Object: " + jsonString);
 
                     await client.PublishEventAsync(PUBSUB, LOCATION_TOPIC, shipmentPosition, cancellationToken);
                     Console.WriteLine("Published last position data: " + shipmentPosition);

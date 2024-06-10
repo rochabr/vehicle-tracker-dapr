@@ -1,4 +1,4 @@
-RELEASE_VERSION  = 0.1.0
+RELEASE_VERSION  = 0.1.1
 SERVICE_NAME = path-handler
 IMAGE_NAME = path-handler
 REGISTRY=rochabr
@@ -18,7 +18,7 @@ run: tidy ## Runs uncompiled code in Dapr
 		--app-protocol http \
 		--dapr-http-port ${DAPR_HTTP_PORT} \
 		--dapr-grpc-port ${DAPR_GRPC_PORT} \
-		--resources-path ../../components/local \
+		--resources-path ../../components/azure \
 		go run ./cmd/api
 
 .PHONY: build_image
