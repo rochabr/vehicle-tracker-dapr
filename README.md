@@ -115,19 +115,3 @@ kubectl get pods -n vehicle-tracker
 minikube service shipment-handler --url -n vehicle-tracker
 ```
 
-## Known issues
-
-There is a current issue with Redis where it constantly becomes full. We are working on mitigating this issue, but if you start seeing a errors related to Redis being unavailable, run the following commands to flush the state store:
-
-```bash
-export REDIS_PASSWORD=$(kubectl get secret --namespace redis redis -o jsonpath="{.data.redis-password}" | base64 -d) 
-k exec -it redis-master-0 -n redis -- /bin/bash
-```
-
-When the Redis prompt is available, run:
-
-```bash
-redis-cli -a $REDIS_PASSWORD --scan --pattern '*' | xargs redis-cli -a $REDIS_PASSWORD DEL
-```
-
-Finally, run `exit` to leave the Redis prompt.
