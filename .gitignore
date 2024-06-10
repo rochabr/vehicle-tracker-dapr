@@ -45,3 +45,7 @@ go.work.sum
 
 # Dependency directories (remove the comment below to include it)
 # vendor/
+
+# Azure components
+
+/components/azure/*.yaml
