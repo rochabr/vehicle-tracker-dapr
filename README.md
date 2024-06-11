@@ -98,7 +98,7 @@ kubectl apply -f ./components/minikube
 ## Deploy services
 
 ```bash
-kubectl apply -f ./deployment/
+kubectl apply -f ./deployment/services
 ```
 
 > The contents of the folder `/deployment-files/k8s` are used for automated CI/CD pipelines, as described in the main [README](./../README.md) file.
