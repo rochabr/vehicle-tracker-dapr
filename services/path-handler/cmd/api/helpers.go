@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 )
 
 const FileName = "path.json"
@@ -113,7 +114,8 @@ func (app *Config) GetPath() (Path, error) {
 		pathToFile = "paths/" + FileName
 	}
 
-	log.Printf("Filename %s\n", pathToFile)
+	log.Printf("Calculating route")
+	time.Sleep(3 * time.Second)
 
 	var positions []Position
 
@@ -130,7 +132,7 @@ func (app *Config) GetPath() (Path, error) {
 	//load positions on path
 	path.Positions = positions
 
-	log.Printf("Loaded %d path from %s\n", len(positions), pathToFile)
+	log.Printf("Route calculated: %d points found\n", len(positions))
 
 	return path, nil
 }

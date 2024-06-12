@@ -18,7 +18,7 @@ run: tidy ## Runs uncompiled code in Dapr
 		--app-protocol http \
 		--dapr-http-port ${DAPR_HTTP_PORT} \
 		--dapr-grpc-port ${DAPR_GRPC_PORT} \
-		--resources-path ../../components/azure \
+		--resources-path ../../components/local \
 		go run ./cmd/api
 
 .PHONY: build_image

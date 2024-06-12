@@ -1,0 +1,36 @@
+version: 1
+common: 
+  resourcesPath: ../components/local
+apps:
+  - appID: location-handler
+    appDirPath: ../services/location-handler
+    appProtocol: http
+    appPort: 5300
+    daprHTTPPort: 5380
+    daprGRPCPort: 5301
+    logLevel: warn
+    command: ["go", "run", "./cmd/api"]
+  - appID: path-handleer
+    appDirPath: ../services/path-handler
+    appProtocol: http
+    appPort: 5200
+    daprHTTPPort: 5280
+    daprGRPCPort: 5201
+    logLevel: warn
+    command: ["go", "run", "./cmd/api"]
+  - appID: shipment-handler
+    appDirPath: ../services/shipment-handler
+    appProtocol: http
+    appPort: 5100
+    daprHTTPPort: 5180
+    daprGRPCPort: 5101
+    logLevel: warn
+    command: ["go", "run", "./cmd/api"]
+  - appID: vehicle-handler
+    appDirPath: ../actors/vehicle-actor
+    appProtocol: http
+    appPort: 7100
+    daprHTTPPort: 7180
+    daprGRPCPort: 7101
+    logLevel: warn
+    command: ["dotnet", "run"]

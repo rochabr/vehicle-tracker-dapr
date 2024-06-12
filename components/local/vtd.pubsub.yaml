@@ -20,3 +20,4 @@ spec:
 scopes:
   - location-handler
   - vehicle-actor
+  - front-end

@@ -68,21 +68,19 @@ func StartShipment(shipment *Shipment) bool {
 	log.Println("Shipment path:", len(shipment.Path.Positions))
 
 	for _, position := range shipment.Path.Positions {
-		log.Println("Position:", position.Latitude, "-", position.Longitude)
+		log.Println("Publishing position:", position.Latitude, "-", position.Longitude, "for shipment: ", shipment.ShipmentID)
 
-		shipmentPosition := ShipmentPosition{
-			ShipmentID: shipment.ShipmentID,
-			Position:   position,
-		}
-
-		jsonString, err := json.Marshal(shipmentPosition)
+		shipmentPosition, err := json.Marshal(
+			ShipmentPosition{
+				ShipmentID: shipment.ShipmentID,
+				Position:   position,
+			})
 		if err != nil {
 			log.Printf("Error marshaling shipment position for Shipment: %s. Error: %v", shipment.ShipmentID, err)
 			return false
 		}
-		log.Println("Object:", string(jsonString))
 
-		err = client.PublishEvent(context.Background(), PubSub, LocationTopic, jsonString)
+		err = client.PublishEvent(context.Background(), PubSub, LocationTopic, shipmentPosition)
 		if err != nil {
 			log.Printf("Error publishing shipment position for Shipment: %s. Error: %v", shipment.ShipmentID, err)
 			return false

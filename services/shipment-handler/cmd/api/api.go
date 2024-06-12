@@ -239,8 +239,7 @@ func (app *Config) getShipment(shipmentId string) (Shipment, error) {
 func (app *Config) getPath() (Path, error) {
 
 	ctx := context.Background()
-	log.Printf("get path")
-	response, err := app.daprClient.InvokeMethod(ctx, PathHandlerServiceDaprId, "path", "get")
+	response, err := app.daprClient.InvokeMethod(ctx, "path-handler", "path", "get")
 	if err != nil {
 		log.Printf("error calling service: %v", err)
 		return Path{Positions: []Position{}},
