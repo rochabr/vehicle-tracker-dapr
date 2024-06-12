@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: location-handler
-          image: "rochabr/location-handler:0.1.1"
+          image: "rochabr/location-handler:0.1.2"
           env:
           - name: APP_PORT
             value: "80"

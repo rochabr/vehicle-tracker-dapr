@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: path-handler
-          image: "rochabr/path-handler:0.1.1"
+          image: "rochabr/path-handler:0.1.2"
           env:
           - name: APP_PORT
             value: "80"

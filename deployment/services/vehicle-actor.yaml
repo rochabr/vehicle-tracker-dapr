@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: vehicle-actor
-          image: "rochabr/vehicle-actor:0.1.1"
+          image: "rochabr/vehicle-actor:0.1.2"
           env:
           - name: APP_PORT
             value: "80"

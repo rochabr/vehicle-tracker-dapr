@@ -12,7 +12,7 @@ AKS_CLUSTER=vtd-aks-$RANDOM
 az group create --name $RESOURCE_GROUP --location $LOCATION
 
 # create an AKS cluster
-az aks create --resource-group vtd-rg-24601 --name $AKS_CLUSTER --node-count 1 --enable-addons monitoring --generate-ssh-keys
+az aks create --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER --node-count 2 --enable-addons http_application_routing --generate-ssh-keys --node-vm-size Standard_B8s_v2
 
 # create a service bus namespace
 az servicebus namespace create --resource-group $RESOURCE_GROUP --name $SERVICE_BUS_NAMESPACE --location $LOCATION
